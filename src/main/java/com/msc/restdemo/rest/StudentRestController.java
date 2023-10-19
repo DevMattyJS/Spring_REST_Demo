@@ -2,9 +2,10 @@ package com.msc.restdemo.rest;
 
 import com.msc.restdemo.entity.Student;
 import jakarta.annotation.PostConstruct;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,36 +47,5 @@ public class StudentRestController {
 
         // just index into the list to keep it simple for now, will be refactored later
         return students.get(studentId);
-    }
-
-    // exception handler for StudentNotFoundException
-    // <StudentErrorResponse> - type of the response body
-    // StudentNotFoundException - exception type to handle / catch
-    @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException (StudentNotFoundException e) {
-
-        // create StudentErrorResponse
-        StudentErrorResponse error = new StudentErrorResponse();
-
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(e.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        // return new ResponseEntity(errorBody, status)
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
-    // exception handler for generic exceptions (catch all)
-    @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException (Exception e) {
-
-        StudentErrorResponse error = new StudentErrorResponse();
-
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
-        error.setMessage(e.getMessage());
-        error.setTimeStamp(System.currentTimeMillis());
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-
     }
 }
